@@ -1,2 +1,2 @@
-# HackGT7
+# StoreNavigator
 HackGT7 Project :)
