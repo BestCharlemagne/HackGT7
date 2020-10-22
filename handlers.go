@@ -38,7 +38,7 @@ func GetStore(w http.ResponseWriter, r *http.Request) {
 
 		json.NewEncoder(w).Encode(sorter.toArray())
 	} else {
-		json.NewEncoder(w).Encode("Error: Must provide a zipcode or id: try '/stores?zipcode=30332'")
+		json.NewEncoder(w).Encode("Error: Must provide a zipcode or id: try '/stores?zipCode=30332'")
 	}
 }
 
