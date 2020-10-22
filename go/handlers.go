@@ -31,18 +31,14 @@ func GetStore(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error converting string to int: %s", err)
 		}
 
-		var nearbyStores [5]Store
-		added := 0
-		for i := 0; i < len(stores) && added < 5; i++ {
-			if stores[i].ZipCode == zipCode {
-				nearbyStores[added] = stores[i]
-				added++
-			}
+		sorter := DistanceLinkedList{target: zipCode, maxSize: 5}
+		for i := 0; i < len(stores); i++ {
+			sorter.Add(&stores[i])
 		}
 
-		json.NewEncoder(w).Encode(nearbyStores[:added])
+		json.NewEncoder(w).Encode(sorter.toArray())
 	} else {
-		json.NewEncoder(w).Encode(stores)
+		json.NewEncoder(w).Encode("Error: Must provide a zipcode or id: try '/stores?zipcode=30332'")
 	}
 }
 

@@ -2,7 +2,7 @@ import requests
 from requests.exceptions import HTTPError
 
 try:
-    response = requests.get('http://localhost:8085/path?zipCode=30332&items=Banana&items=Oranges&items=Strawberry')
+    response = requests.get('http://localhost:8085/stores?zipCode=30000')
     response.raise_for_status()
     #access JSON content
     jsonResponse = response.json()
