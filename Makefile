@@ -1,2 +1,2 @@
 run:
-	go run HackGT7/go
+	go run HackGT7

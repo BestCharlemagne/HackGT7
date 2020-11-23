@@ -25,7 +25,7 @@ func init() {
 	RepoCreateStore(
 		Store{
 			Title:   "Sam's Market",
-			ZipCode: 30482,
+			ZipCode: 30402,
 			Items: []Item{
 				Item{Name: "Oranges", Row: 0, Column: 2},
 				Item{Name: "Banana", Row: 3, Column: 6},
@@ -40,37 +40,7 @@ func init() {
 	RepoCreateStore(
 		Store{
 			Title:   "Rons's Market",
-			ZipCode: 30482,
-			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
-			Path: [][]string{
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "/", "/", "/", "/", "/", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "/", "/", "/", "/", "/", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"}}})
-	RepoCreateStore(
-		Store{
-			Title:   "Bobs's Market",
-			ZipCode: 30482,
-			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
-			Path: [][]string{
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "/", "/", "/", "/", "/", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"},
-				{"+", "/", "/", "/", "/", "/", "+"},
-				{"+", "+", "+", "+", "+", "+", "+"}}})
-	RepoCreateStore(
-		Store{
-			Title:   "Liam's Market",
-			ZipCode: 30482,
+			ZipCode: 30082,
 			Items: []Item{
 				Item{Name: "Oranges", Row: 0, Column: 2},
 				Item{Name: "Banana", Row: 3, Column: 6},
@@ -85,7 +55,97 @@ func init() {
 	RepoCreateStore(
 		Store{
 			Title:   "Jessica's Market",
-			ZipCode: 30482,
+			ZipCode: 50482,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Jessica's Market",
+			ZipCode: 92117,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Jessica's Market",
+			ZipCode: 30002,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Jessica's Market",
+			ZipCode: 30040,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Bobs's Market",
+			ZipCode: 29982,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Liam's Market",
+			ZipCode: 40082,
+			Items: []Item{
+				Item{Name: "Oranges", Row: 0, Column: 2},
+				Item{Name: "Banana", Row: 3, Column: 6},
+				Item{Name: "Pineapple", Row: 5, Column: 3}},
+			Path: [][]string{
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"},
+				{"+", "/", "/", "/", "/", "/", "+"},
+				{"+", "+", "+", "+", "+", "+", "+"}}})
+	RepoCreateStore(
+		Store{
+			Title:   "Jessica's Market",
+			ZipCode: 20482,
 			Items: []Item{
 				Item{Name: "Oranges", Row: 0, Column: 2},
 				Item{Name: "Banana", Row: 3, Column: 6},

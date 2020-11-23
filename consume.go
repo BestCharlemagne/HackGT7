@@ -21,5 +21,4 @@ func consume() {
 		log.Fatal(err)
 	}
 	fmt.Println(string(responseData))
-
 }
