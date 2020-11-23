@@ -31,15 +31,46 @@ func GetStore(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error converting string to int: %s", err)
 		}
 
-		sorter := DistanceLinkedList{target: zipCode, maxSize: 5}
-		for i := 0; i < len(stores); i++ {
-			sorter.Add(&stores[i])
-		}
-
-		json.NewEncoder(w).Encode(sorter.toArray())
+		json.NewEncoder(w).Encode(quickSelect(zipCode, stores, 0, len(stores)-1, 5))
 	} else {
 		json.NewEncoder(w).Encode("Error: Must provide a zipcode or id: try '/stores?zipCode=30332'")
 	}
+}
+
+func quickSelect(zipCode int, array Stores, start int, end int, numItems int) Store {
+	pivot := len(array) / 2
+	pivotItem := (array)[pivot]
+	swap(&array, 0, pivot) //Pivot now at front
+
+	i := start
+	j := end
+
+	for i <= j {
+		for i <= j && abs(zipCode-(array)[i].ZipCode)-pivotItem.ZipCode < 0 {
+			i++
+		}
+		for i <= j && abs(zipCode-(array)[i].ZipCode)-pivotItem.ZipCode > 0 {
+			j++
+		}
+		if i <= j {
+			swap(&array, i, j)
+			i++
+			j--
+		}
+	}
+	swap(&array, start, j) //Swap pivot into correct place
+	if j == numItems-1 {
+		return array[j]
+	} else if j > numItems-1 {
+		return quickSelect(zipCode, array, start, j-1, numItems)
+	}
+	return quickSelect(zipCode, array, j+1, end, numItems)
+}
+
+func swap(array *Stores, to int, from int) {
+	store := (*array)[to]
+	(*array)[to] = (*array)[from]
+	(*array)[from] = store
 }
 
 //CalculatePath expects a query string with a list of items to get.
