@@ -12,9 +12,9 @@ func init() {
 			Title:   "Joe's Market",
 			ZipCode: 30332,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 0},
-				Item{Name: "Strawberry", Row: 3, Column: 6},
-				Item{Name: "Banana", Row: 2, Column: 2}},
+				{Name: "Oranges", Row: 0, Column: 0},
+				{Name: "Strawberry", Row: 3, Column: 6},
+				{Name: "Banana", Row: 2, Column: 2}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "+", "/", "+", "/", "+"},
@@ -27,9 +27,9 @@ func init() {
 			Title:   "Sam's Market",
 			ZipCode: 30402,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -42,9 +42,9 @@ func init() {
 			Title:   "Rons's Market",
 			ZipCode: 30082,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -57,9 +57,9 @@ func init() {
 			Title:   "Jessica's Market",
 			ZipCode: 50482,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -72,9 +72,9 @@ func init() {
 			Title:   "Jessica's Market",
 			ZipCode: 92117,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -87,9 +87,9 @@ func init() {
 			Title:   "Jessica's Market",
 			ZipCode: 30002,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -102,9 +102,9 @@ func init() {
 			Title:   "Jessica's Market",
 			ZipCode: 30040,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -117,9 +117,9 @@ func init() {
 			Title:   "Bobs's Market",
 			ZipCode: 29982,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -132,9 +132,9 @@ func init() {
 			Title:   "Liam's Market",
 			ZipCode: 40082,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},
@@ -147,9 +147,9 @@ func init() {
 			Title:   "Jessica's Market",
 			ZipCode: 20482,
 			Items: []Item{
-				Item{Name: "Oranges", Row: 0, Column: 2},
-				Item{Name: "Banana", Row: 3, Column: 6},
-				Item{Name: "Pineapple", Row: 5, Column: 3}},
+				{Name: "Oranges", Row: 0, Column: 2},
+				{Name: "Banana", Row: 3, Column: 6},
+				{Name: "Pineapple", Row: 5, Column: 3}},
 			Path: [][]string{
 				{"+", "+", "+", "+", "+", "+", "+"},
 				{"+", "/", "/", "/", "/", "/", "+"},

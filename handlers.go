@@ -30,50 +30,14 @@ func GetStore(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("Error converting string to int: %s", err)
 		}
-		quickSelect(zipCode, stores, 0, len(stores)-1, 5)
-		json.NewEncoder(w).Encode(stores)
+		var copiedStores Stores = make(Stores, len(stores))
+		copy(copiedStores, stores)
+
+		quickSelect(zipCode, copiedStores, 0, len(copiedStores)-1, 5)
+		json.NewEncoder(w).Encode(copiedStores[0:5])
 	} else {
 		json.NewEncoder(w).Encode("Error: Must provide a zipcode or id: try '/stores?zipCode=30332'")
 	}
-}
-
-func quickSelect(zipCode int, array Stores, start int, end int, numItems int) {
-	if end-start <= 0 {
-		return
-	}
-	var pivot int = (end - start) / 2
-	var pivotItem int = abs(zipCode - (array)[pivot].ZipCode)
-	swap(&array, 0, pivot) //Pivot now at front
-
-	i := start + 1
-	j := end
-
-	for i <= j {
-		for i <= j && abs(zipCode-(array)[i].ZipCode)-pivotItem <= 0 {
-			i++
-		}
-		for i <= j && abs(zipCode-(array)[j].ZipCode)-pivotItem >= 0 {
-			j--
-		}
-		if i <= j {
-			swap(&array, i, j)
-			i++
-			j--
-		}
-	}
-	swap(&array, start, j) //Swap pivot into correct place
-	if j == numItems-1 {
-		return
-	} else if j > numItems-1 {
-		quickSelect(zipCode, array, start, j-1, numItems)
-	}
-	quickSelect(zipCode, array, j+1, end, numItems)
-}
-
-func swap(array *Stores, to int, from int) {
-	store := (*array)[to]
-	(*array)[to] = (*array)[from]
-	(*array)[from] = store
 }
 
 //CalculatePath expects a query string with a list of items to get.
