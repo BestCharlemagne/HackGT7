@@ -13,5 +13,6 @@ func handleRequests() {
 }
 
 func main() {
+	AddStores()
 	handleRequests()
 }

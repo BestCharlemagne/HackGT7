@@ -9,9 +9,5 @@ type Store struct {
 	Path    [][]string `json:"path"`
 }
 
-func (s *Store) compareTo(other *Store) int {
-	return s.ZipCode - other.ZipCode
-}
-
 //Stores is a type defintion for a slice of stores
 type Stores []Store
