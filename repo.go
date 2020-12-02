@@ -6,6 +6,15 @@ var currentID int
 
 var stores Stores
 
+type Repo interface {
+	Open()
+	Close()
+	addStore(store Store)
+	addAllStores(stores []Store)
+	removeStores(store Store)
+	getStores() []Store
+}
+
 //RepoAddStores takes a slice of stores and appends them to the database.
 func RepoAddStores(storesToAdd []Store) {
 	for _, store := range storesToAdd {

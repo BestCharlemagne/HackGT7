@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 )
@@ -13,6 +14,11 @@ func handleRequests() {
 }
 
 func main() {
-	AddStores()
+	test := flag.Bool("test", false, "Use to run on the test server. \nfalse by default.")
+	flag.Parse()
+
+	if *test {
+		AddStores()
+	}
 	handleRequests()
 }
