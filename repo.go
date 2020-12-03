@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 var currentID int
 
@@ -13,6 +16,29 @@ type Repo interface {
 	addAllStores(stores []Store)
 	removeStores(store Store)
 	getStores() []Store
+}
+
+//GetAllStores currently retieves all stores with only support for a test SQL database.
+func GetAllStores(test bool) {
+	if test {
+		repo := TestRepo{}
+		database := repo.GetDatabase()
+
+		rows, err := database.Query("SELECT * FROM stores")
+		defer rows.Close()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			for rows.Next() {
+				var newStore Store
+				err := rows.Scan(&newStore.ID, &newStore.Title, &newStore.ZipCode, &newStore.Path)
+				if err != nil {
+					log.Fatal(err)
+				}
+				stores = append(stores, newStore)
+			}
+		}
+	}
 }
 
 //RepoAddStores takes a slice of stores and appends them to the database.
