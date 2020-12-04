@@ -13,7 +13,7 @@ type TestRepo struct {
 
 func (repo TestRepo) GetDatabase() *sql.DB {
 	if repo.database == nil {
-		db, err := sql.Open("mysql", "root:test@tcp(127.0.0.1:3306)/test")
+		db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/store_navigator")
 
 		if err != nil {
 			log.Fatal(err)

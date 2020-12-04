@@ -16,9 +16,10 @@ func handleRequests() {
 func main() {
 	test := flag.Bool("test", false, "Use to run on the test server. \nfalse by default.")
 	flag.Parse()
+	PostData()
 
 	if *test {
-		AddStores()
+		GetAllStores(true)
 	}
 	handleRequests()
 }
