@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"net/http"
 )
@@ -14,12 +13,12 @@ func handleRequests() {
 }
 
 func main() {
-	test := flag.Bool("test", false, "Use to run on the test server. \nfalse by default.")
-	flag.Parse()
-	PostData()
+	// test := flag.Bool("test", false, "Use to run on the test server. \nfalse by default.")
+	// flag.Parse()
 
-	if *test {
-		GetAllStores(true)
-	}
+	testRepo := TestRepo{}
+
+	stores := testRepo.GetAllStores()
+	print(stores)
 	handleRequests()
 }
