@@ -20,5 +20,7 @@ func main() {
 
 	stores := testRepo.GetAllStores()
 	print(stores)
+
+	testRepo.RemoveStore(Store{ID: 1})
 	handleRequests()
 }

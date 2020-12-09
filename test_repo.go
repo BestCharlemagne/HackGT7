@@ -92,6 +92,43 @@ func (repo TestRepo) AddAllStores(stores []Store) {
 	}
 }
 
+//RemoveStore removes a specific store, decided by its id
+//Be careful, if you have multiple stores with same id, all will be deleted.
+func (repo TestRepo) RemoveStore(store Store) {
+	database := repo.getDatabase()
+	stmt, err := database.Prepare("DELETE FROM stores WHERE id=?")
+	defer stmt.Close()
+	if err == nil {
+		result, execError := stmt.Exec(store.ID)
+
+		if execError != nil {
+			log.Fatal(execError)
+		} else {
+			print(result.RowsAffected())
+		}
+	} else {
+		log.Fatal(err)
+	}
+}
+
+//RemoveAllStores removes all stores from the database
+func (repo TestRepo) RemoveAllStores(store Store) {
+	database := repo.getDatabase()
+	stmt, err := database.Prepare("DELETE FROM stores")
+	defer stmt.Close()
+	if err == nil {
+		result, execError := stmt.Exec(store.ID)
+
+		if execError != nil {
+			log.Fatal(execError)
+		} else {
+			print(result.RowsAffected())
+		}
+	} else {
+		log.Fatal(err)
+	}
+}
+
 //Close closes the database connection
 func (repo TestRepo) Close() {
 	repo.database.Close()

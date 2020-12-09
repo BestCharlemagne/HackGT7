@@ -12,7 +12,8 @@ var stores Stores
 type Repo interface {
 	AddStore(store Store)
 	AddAllStores(stores []Store)
-	// RemoveStores(store Store)
+	RemoveStore(store Store)
+	RemoveAllStores()
 	GetStores() []Store
 	Close()
 }
