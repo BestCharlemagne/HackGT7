@@ -20,6 +20,13 @@ func (m *PathType) Scan(src interface{}) error {
 	return json.Unmarshal(val, &m)
 }
 
+//Scan overrides the sql.Scan method to parse the json from the database to a PathType
+func (m *ItemType) Scan(src interface{}) error {
+	// The data stored in a JSON field is actually returned as []uint8
+	val := src.([]uint8)
+	return json.Unmarshal(val, &m)
+}
+
 //GetAllStores currently retieves all stores with only support for a test SQL database.
 func (repo TestRepo) GetAllStores() []Store {
 	rows, err := repo.getDatabase().Query("SELECT * FROM stores")
@@ -32,7 +39,7 @@ func (repo TestRepo) GetAllStores() []Store {
 	} else {
 		for rows.Next() {
 			var newStore Store
-			err := rows.Scan(&newStore.ID, &newStore.Title, &newStore.ZipCode, &newStore.Path)
+			err := rows.Scan(&newStore.ID, &newStore.Title, &newStore.ZipCode, &newStore.Path, &newStore.Items)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -45,50 +52,69 @@ func (repo TestRepo) GetAllStores() []Store {
 //AddStore adds a single store to the database
 func (repo TestRepo) AddStore(store Store) {
 	database := repo.getDatabase()
-	bytes, err := json.Marshal(store.Path)
-	if err == nil {
-		stmt, err := database.Prepare("INSERT INTO stores VALUES (?, ? , ?, ?)")
+	pathJSON, pathErr := json.Marshal(store.Path)
+	itemsJSON, itemsErr := json.Marshal(store.Items)
+	if pathErr == nil && itemsErr == nil {
+		stmt, prepareErr := database.Prepare("INSERT INTO stores VALUES (?, ? , ?, ?, ?)")
 		defer stmt.Close()
 
-		if err != nil {
-			log.Fatal(err)
+		if prepareErr != nil {
+			log.Fatal(prepareErr)
 		}
 
-		result, err2 := stmt.Exec(store.ID, store.Title, store.ZipCode, bytes)
+		result, executeErr := stmt.Exec(store.ID, store.Title, store.ZipCode, pathJSON, itemsJSON)
 
-		if err2 == nil {
+		if executeErr == nil {
 			print(result.RowsAffected())
 		} else {
-			log.Fatal(err2)
+			log.Fatal(executeErr)
 		}
 	} else {
-		log.Fatal(err)
+		if pathErr != nil {
+			log.Fatal(pathErr)
+		}
+		if itemsErr != nil {
+			log.Fatal(itemsErr)
+		}
 	}
 }
 
 //AddAllStores adds a list of stores to the database
 func (repo TestRepo) AddAllStores(stores []Store) {
 	database := repo.getDatabase()
-	for _, store := range stores {
-		bytes, err := json.Marshal(store.Path)
-		if err == nil {
-			stmt, err := database.Prepare("INSERT INTO stores VALUES (?, ? , ?, ?)")
-			defer stmt.Close()
+	tx, txErr := database.Begin()
+	if txErr == nil {
+		stmt, prepareErr := database.Prepare("INSERT INTO stores VALUES (?, ? , ?, ?, ?)")
+		defer stmt.Close()
 
-			if err != nil {
-				log.Fatal(err)
+		if prepareErr == nil {
+			for _, store := range stores {
+				pathJSON, pathErr := json.Marshal(store.Path)
+				itemsJSON, itemsErr := json.Marshal(store.Items)
+				if pathErr == nil && itemsErr == nil {
+
+					result, executeErr := stmt.Exec(store.ID, store.Title, store.ZipCode, pathJSON, itemsJSON)
+
+					if executeErr == nil {
+						print(result.RowsAffected())
+					} else {
+						log.Fatal(executeErr)
+					}
+				} else {
+					if pathErr != nil {
+						log.Fatal(pathErr)
+					}
+					if itemsErr != nil {
+						log.Fatal(itemsErr)
+					}
+				}
 			}
-
-			result, err2 := stmt.Exec(store.ID, store.Title, store.ZipCode, bytes)
-
-			if err2 == nil {
-				print(result.RowsAffected())
-			} else {
-				log.Fatal(err2)
-			}
+			tx.Commit()
 		} else {
-			log.Fatal(err)
+			log.Fatal(prepareErr)
 		}
+	} else {
+		log.Fatal(txErr)
 	}
 }
 
