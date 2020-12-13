@@ -138,12 +138,12 @@ func (repo TestRepo) RemoveStore(store Store) {
 }
 
 //RemoveAllStores removes all stores from the database
-func (repo TestRepo) RemoveAllStores(store Store) {
+func (repo TestRepo) RemoveAllStores() {
 	database := repo.getDatabase()
 	stmt, err := database.Prepare("DELETE FROM stores")
 	defer stmt.Close()
 	if err == nil {
-		result, execError := stmt.Exec(store.ID)
+		result, execError := stmt.Exec()
 
 		if execError != nil {
 			log.Fatal(execError)
