@@ -1,4 +1,4 @@
-package main
+package repository
 
 //PathType is used to decode and encode a json array of arrays into this Go type
 type PathType [][]string

@@ -1,15 +1,16 @@
-package main
+package repository
 
 import (
 	"database/sql"
 	"encoding/json"
 	"log"
 
+	//mysql driver is used to setup the sql methods to work with a mysql server
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//TestRepo is a struct to represent a testing MySQL database
-type TestRepo struct {
+//ExampleRepo is a struct to represent a testing MySQL database
+type ExampleRepo struct {
 	database *sql.DB
 }
 
@@ -28,7 +29,7 @@ func (m *ItemType) Scan(src interface{}) error {
 }
 
 //GetAllStores currently retieves all stores with only support for a test SQL database.
-func (repo TestRepo) GetAllStores() []Store {
+func (repo ExampleRepo) GetAllStores() []Store {
 	rows, err := repo.getDatabase().Query("SELECT * FROM stores")
 	defer rows.Close()
 
@@ -50,7 +51,7 @@ func (repo TestRepo) GetAllStores() []Store {
 }
 
 //AddStore adds a single store to the database
-func (repo TestRepo) AddStore(store Store) {
+func (repo ExampleRepo) AddStore(store Store) {
 	database := repo.getDatabase()
 	pathJSON, pathErr := json.Marshal(store.Path)
 	itemsJSON, itemsErr := json.Marshal(store.Items)
@@ -80,7 +81,7 @@ func (repo TestRepo) AddStore(store Store) {
 }
 
 //AddAllStores adds a list of stores to the database
-func (repo TestRepo) AddAllStores(stores []Store) {
+func (repo ExampleRepo) AddAllStores(stores []Store) {
 	database := repo.getDatabase()
 	tx, txErr := database.Begin()
 	if txErr == nil {
@@ -120,7 +121,7 @@ func (repo TestRepo) AddAllStores(stores []Store) {
 
 //RemoveStore removes a specific store, decided by its id
 //Be careful, if you have multiple stores with same id, all will be deleted.
-func (repo TestRepo) RemoveStore(store Store) {
+func (repo ExampleRepo) RemoveStore(store Store) {
 	database := repo.getDatabase()
 	stmt, err := database.Prepare("DELETE FROM stores WHERE id=?")
 	defer stmt.Close()
@@ -138,7 +139,7 @@ func (repo TestRepo) RemoveStore(store Store) {
 }
 
 //RemoveAllStores removes all stores from the database
-func (repo TestRepo) RemoveAllStores() {
+func (repo ExampleRepo) RemoveAllStores() {
 	database := repo.getDatabase()
 	stmt, err := database.Prepare("DELETE FROM stores")
 	defer stmt.Close()
@@ -156,11 +157,11 @@ func (repo TestRepo) RemoveAllStores() {
 }
 
 //Close closes the database connection
-func (repo TestRepo) Close() {
+func (repo ExampleRepo) Close() {
 	repo.database.Close()
 }
 
-func (repo TestRepo) getDatabase() *sql.DB {
+func (repo ExampleRepo) getDatabase() *sql.DB {
 	if repo.database == nil {
 		db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/store_navigator")
 
