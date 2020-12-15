@@ -15,14 +15,14 @@ type ExampleRepo struct {
 }
 
 //Scan overrides the sql.Scan method to parse the json from the database to a PathType
-func (m *PathType) Scan(src interface{}) error {
+func (m *PathArray) Scan(src interface{}) error {
 	// The data stored in a JSON field is actually returned as []uint8
 	val := src.([]uint8)
 	return json.Unmarshal(val, &m)
 }
 
 //Scan overrides the sql.Scan method to parse the json from the database to a PathType
-func (m *ItemType) Scan(src interface{}) error {
+func (m *ItemArray) Scan(src interface{}) error {
 	// The data stored in a JSON field is actually returned as []uint8
 	val := src.([]uint8)
 	return json.Unmarshal(val, &m)
