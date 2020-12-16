@@ -1,25 +1,25 @@
-type StoreQueue struct {
-	head *StoreNode
-	tail *StoreNode
+type ItemQueue struct {
+	head *ItemNode
+	tail *ItemNode
 }
 
-type StoreNode struct {
-	store Store
-	next  *StoreNode
+type ItemNode struct {
+	item Item
+	next *ItemNode
 }
 
-func (s StoreQueue) pop() Store {
-	poppedStore := nil
+func (s StoreQueue) pop() Item {
+	poppedItem := nil
 	if head != nil {
 		head = head.next
-		poppedStore = head.store
+		poppedStore = head.item
 	}
 
-	return poppedStore
+	return poppedItem
 }
 
-func (s StoreQueue) push(store Store) {
-	newNode := StoreNode{Store: store}
+func (s ItemQueue) push(item Item) {
+	newNode := ItemNode{item: item}
 	if head == nil {
 		head = *newNode
 		tail = *newNode
