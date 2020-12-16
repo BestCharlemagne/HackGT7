@@ -1,7 +1,7 @@
 package repository
 
 //PathArray is used to decode and encode a json array of arrays into this Go type
-type PathArray [][]rune
+type PathArray [][]pathRune
 
 //ItemArray is used to decode and encode a json arrays into this Go type
 type ItemArray []Item

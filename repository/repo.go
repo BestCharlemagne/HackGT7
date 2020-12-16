@@ -19,7 +19,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 0},
 			{Type: Product, Name: "Strawberry", Row: 3, Column: 6},
 			{Type: Product, Name: "Banana", Row: 2, Column: 2}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '+', '/', '+', '/', '+'},
 			{'+', '/', '+', '/', '+', '/', '+'},
@@ -34,7 +34,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -49,7 +49,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -64,7 +64,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -79,7 +79,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -94,7 +94,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -109,7 +109,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -124,7 +124,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -139,7 +139,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},
@@ -154,7 +154,7 @@ var ExampleStores []Store = []Store{
 			{Type: Product, Name: "Oranges", Row: 0, Column: 2},
 			{Type: Product, Name: "Banana", Row: 3, Column: 6},
 			{Type: Product, Name: "Pineapple", Row: 5, Column: 3}},
-		Path: [][]rune{
+		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '/', '/', '/', '/', '+'},
 			{'+', '+', '+', '+', '+', '+', '+'},

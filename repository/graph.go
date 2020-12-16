@@ -1,6 +1,8 @@
+package repository
+
 type StoreGraph struct {
-	Vertices []Vertex                    `json:"vertices"`
-	AdjList  map[Vertex][]VertexDistance `json:"adjList"`
+	Vertices []Item                    `json:"vertices"`
+	AdjList  map[Item][]VertexDistance `json:"adjList"`
 }
 
 type Vertex struct {
@@ -27,40 +29,40 @@ func (s Store) GraphStore() GraphedStore {
 		height := len(s.Path)
 		width := len(s.Path[0])
 		size := height * width
-		visitedMap := map[Item]bool
-		queue := StoreQueue{}
+		visitedMap := map[Item]bool{}
+		queue := ItemQueue{}
 		queue.push(Item{Type: s.Path[0][0].getItemType(), Row: 0, Column: 0})
 
+		pushItem := func(curr Item, row int, column int) {
+			//TODO: need to check if a product is at this location
+			item := Item{Type: s.Path[row][column].getItemType(), Row: row, Column: column}
+			if !visitedMap[item] {
+				queue.push(item)
+				graphedStore.Graph.AdjList[curr] = append(graphedStore.Graph.AdjList[curr], VertexDistance{DestinationItem: item, Distance: (abs(curr.Row-row) + abs(curr.Column-column))})
+			}
+		}
+
 		for len(visitedMap) < size {
-			currItem = graphedStore.pop()
-			if !currItem[i] {
-				visitedMap[i] = true
+			currItem := queue.pop()
+			if !visitedMap[currItem] {
+				visitedMap[currItem] = true
 				//Push left neighbor
 				if currItem.Column > 0 {
-					pushItem(currItem.Row, currItem.Column - 1)
+					pushItem(currItem, currItem.Row, currItem.Column-1)
 				}
 				//Push top neighbor
 				if currItem.Row > 0 {
-					pushItem(currItem.Row - 1, currItem.Column)
+					pushItem(currItem, currItem.Row-1, currItem.Column)
 				}
 				//Push right neighbor
 				if currItem.Column < width {
-					pushItem(currItem.Row, CurrItem.Column + 1)
+					pushItem(currItem, currItem.Row, currItem.Column+1)
 				}
 				//Push bottom neighbor
 				if currItem.Row < height {
-					pushItem(currItem.Row + 1, CurrItem.Column)
+					pushItem(currItem, currItem.Row+1, currItem.Column)
 				}
 			}
-		}
-	}
-
-	func (curr Item) pushItem(row int, column int) {
-		//TODO: need to check if a product is at this location
-		item := Item{Type: s.Path[row][column]}, Row: row, Column: column}
-		if !visitedMap[item] {
-			queue.push(item)
-			append(graphedStore.Graph.AdjList[Item], VertexDistance{item, abs(curr.Row - row) + abs(curr.Column - column)}
 		}
 	}
 
