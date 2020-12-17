@@ -24,4 +24,5 @@ type Item struct {
 	Name   string
 	Row    int
 	Column int
+	ID     int
 }

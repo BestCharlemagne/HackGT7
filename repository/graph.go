@@ -1,17 +1,20 @@
 package repository
 
 type StoreGraph struct {
-	Vertices []Item                    `json:"vertices"`
-	AdjList  map[Item][]VertexDistance `json:"adjList"`
+	Items       map[int]Item `json:"items"`
+	AdjList     []Vertex     `json:"adjList"`
+	StartVertex *Vertex      `json:"start"`
+	EndVertex   *Vertex      `json:"end"`
 }
 
 type Vertex struct {
-	StoredItem Item `json:"item"`
+	StoredItem Item     `json:"item"`
+	Neighbors  []Vertex `json:"neighbors"`
 }
 
 type VertexDistance struct {
-	DestinationItem Item `json:"item"`
-	Distance        int  `json:"distance"`
+	DestinationVertex Vertex `json:"item"`
+	Distance          int    `json:"distance"`
 }
 
 type GraphedStore struct {
@@ -28,40 +31,46 @@ func (s Store) GraphStore() GraphedStore {
 		graphedStore.GraphedStore = s
 		height := len(s.Path)
 		width := len(s.Path[0])
-		size := height * width
-		visitedMap := map[Item]bool{}
-		queue := ItemQueue{}
-		queue.push(Item{Type: s.Path[0][0].getItemType(), Row: 0, Column: 0})
 
-		pushItem := func(curr Item, row int, column int) {
-			//TODO: need to check if a product is at this location
-			item := Item{Type: s.Path[row][column].getItemType(), Row: row, Column: column}
-			if !visitedMap[item] {
-				queue.push(item)
-				graphedStore.Graph.AdjList[curr] = append(graphedStore.Graph.AdjList[curr], VertexDistance{DestinationItem: item, Distance: (abs(curr.Row-row) + abs(curr.Column-column))})
+		graphedStore.Graph.AdjList = make([]Vertex, height*width)
+		var j int //Row
+		i := 0    //Column
+
+		getIndex := func(row int, column int) int {
+			return row*len(s.Path[row]) + column
+		}
+
+		index := 0
+		getItem := func(row int, column int) Item {
+			var itemAtIndex *Item
+			for itemAtIndex != nil && index < len(s.Items) {
+				if s.Items[index].Row == row && s.Items[index].Column == column {
+					itemAtIndex = &s.Items[index]
+				}
+				graphedStore.Graph.Items[s.Items[index].ID] = s.Items[index]
+				index++
+			}
+			if itemAtIndex == nil {
+				itemAtIndex = &Item{Type: s.Path[row][column].getItemType(), Row: row, Column: column}
+			}
+			return *itemAtIndex
+		}
+
+		//TODO: Need to incorporate distance
+		pushItem := func(neighborVertex Vertex, row int, column int) {
+			if row >= 0 && row < len(s.Path) && column >= 0 && column < len(s.Path[row]) && s.Path[row][column].getItemType() != Wall {
+				neighborVertex.Neighbors = append(neighborVertex.Neighbors, graphedStore.Graph.AdjList[getIndex(row, column)])
 			}
 		}
 
-		for len(visitedMap) < size {
-			currItem := queue.pop()
-			if !visitedMap[currItem] {
-				visitedMap[currItem] = true
-				//Push left neighbor
-				if currItem.Column > 0 {
-					pushItem(currItem, currItem.Row, currItem.Column-1)
-				}
-				//Push top neighbor
-				if currItem.Row > 0 {
-					pushItem(currItem, currItem.Row-1, currItem.Column)
-				}
-				//Push right neighbor
-				if currItem.Column < width {
-					pushItem(currItem, currItem.Row, currItem.Column+1)
-				}
-				//Push bottom neighbor
-				if currItem.Row < height {
-					pushItem(currItem, currItem.Row+1, currItem.Column)
-				}
+		for j = 0; j < len(s.Path); j++ {
+			for i < len(s.Path[j]) {
+				neighborVertex := graphedStore.Graph.AdjList[getIndex(i, j)]
+				pushItem(neighborVertex, i, j-1)
+				pushItem(neighborVertex, i, j+1)
+				pushItem(neighborVertex, i-1, j)
+				pushItem(neighborVertex, i+1, j)
+				graphedStore.Graph.AdjList[getIndex(i, j)] = Vertex{StoredItem: getItem(i, j)}
 			}
 		}
 	}
