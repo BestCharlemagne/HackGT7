@@ -16,9 +16,9 @@ var ExampleStores []Store = []Store{
 		Title:   "Joe's Market",
 		ZipCode: 30332,
 		Items: []Item{
-			{Type: Product, Name: "Oranges", Row: 0, Column: 0},
-			{Type: Product, Name: "Strawberry", Row: 3, Column: 6},
-			{Type: Product, Name: "Banana", Row: 2, Column: 2}},
+			{Type: Product, ID: 0, Name: "Oranges", Row: 0, Column: 0},
+			{Type: Product, ID: 1, Name: "Strawberry", Row: 3, Column: 6},
+			{Type: Product, ID: 2, Name: "Banana", Row: 2, Column: 2}},
 		Path: [][]pathRune{
 			{'+', '+', '+', '+', '+', '+', '+'},
 			{'+', '/', '+', '/', '+', '/', '+'},

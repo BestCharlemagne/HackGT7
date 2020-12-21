@@ -5,10 +5,10 @@ package repository
 //simple list of Items, while the Items in this struct is a map that allows quick access to a specific item by ID.
 type StoreGraph struct {
 	GraphedStore *Store
-	Items        map[int]Item `json:"items"`
-	AdjList      []Vertex     `json:"adjList"`
-	StartVertex  *Vertex      `json:"start"`
-	EndVertex    *Vertex      `json:"end"`
+	Items        map[int]*Item `json:"items"`
+	AdjList      []*Vertex     `json:"adjList"`
+	StartVertex  *Vertex       `json:"start"`
+	EndVertex    *Vertex       `json:"end"`
 }
 
 //point is a simple structure to hold a row and column
@@ -25,8 +25,8 @@ type Vertex struct {
 
 //VertexDistance contains the distance to a specific vertex
 type VertexDistance struct {
-	DestinationVertex Vertex `json:"item"`
-	Distance          int    `json:"distance"`
+	DestinationVertex *Vertex `json:"item"`
+	Distance          int     `json:"distance"`
 }
 
 //GraphStore will only be successful if path is connected
@@ -39,22 +39,32 @@ func (s *Store) GraphStore() StoreGraph {
 		height := len(s.Path)
 		width := len(s.Path[0])
 
-		graph.AdjList = make([]Vertex, height*width)
+		graph.AdjList = make([]*Vertex, height*width)
 		var j int //Row
 		i := 0    //Column
+
+		graph.Items = make(map[int]*Item, len(s.Items))
 
 		memo := make(map[point]*Item, len(s.Items))
 
 		index := 0
 
 		for j = 0; j < len(s.Path); j++ {
-			for i < len(s.Path[j]) {
+			for i = 0; i < len(s.Path[j]); i++ {
 				neighborVertex := graph.AdjList[getIndex(&s.Path, i, j)]
+				if neighborVertex == nil {
+					neighborVertex = &Vertex{StoredItem: graph.getItem(memo, &index, i, j)}
+					graph.AdjList[getIndex(&s.Path, i, j)] = neighborVertex
+				}
 				graph.pushNeighbors(neighborVertex, i, j-1)
 				graph.pushNeighbors(neighborVertex, i, j+1)
 				graph.pushNeighbors(neighborVertex, i-1, j)
 				graph.pushNeighbors(neighborVertex, i+1, j)
-				graph.AdjList[getIndex(&s.Path, i, j)] = Vertex{StoredItem: graph.getItem(memo, &index, i, j)}
+				if neighborVertex.StoredItem.Type == Entrance {
+					graph.StartVertex = neighborVertex
+				} else if neighborVertex.StoredItem.Type == Exit {
+					graph.EndVertex = neighborVertex
+				}
 			}
 		}
 	}
@@ -76,7 +86,7 @@ func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, colu
 		if graph.GraphedStore.Items[*index].Row == row && graph.GraphedStore.Items[*index].Column == column {
 			itemAtIndex = &graph.GraphedStore.Items[*index]
 		}
-		graph.Items[graph.GraphedStore.Items[*index].ID] = graph.GraphedStore.Items[*index]
+		graph.Items[graph.GraphedStore.Items[*index].ID] = &graph.GraphedStore.Items[*index]
 		memo[point{row: row, column: column}] = &graph.GraphedStore.Items[*index]
 		*index++
 	}
@@ -87,7 +97,7 @@ func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, colu
 }
 
 //pushNeighbors adds all neighbors of a vertex to the graph
-func (graph *StoreGraph) pushNeighbors(neighborVertex Vertex, row int, column int) {
+func (graph *StoreGraph) pushNeighbors(neighborVertex *Vertex, row int, column int) {
 	if row >= 0 && row < len(graph.GraphedStore.Path) && column >= 0 &&
 		column < len(graph.GraphedStore.Path[row]) && graph.GraphedStore.Path[row][column].getItemType() != Wall {
 		vertex := graph.AdjList[getIndex(&graph.GraphedStore.Path, row, column)]
