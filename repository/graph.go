@@ -6,7 +6,7 @@ package repository
 type StoreGraph struct {
 	GraphedStore *Store
 	Items        map[int]*Item `json:"items"`
-	AdjList      []*Vertex     `json:"adjList"`
+	AdjList      []Vertex      `json:"adjList"`
 	StartVertex  *Vertex       `json:"start"`
 	EndVertex    *Vertex       `json:"end"`
 }
@@ -19,7 +19,7 @@ type point struct {
 
 //Vertex contains the data at the vertex as well as distances to all neighbor vertices
 type Vertex struct {
-	StoredItem Item             `json:"item"`
+	StoredItem *Item            `json:"item"`
 	Neighbors  []VertexDistance `json:"neighbors"`
 }
 
@@ -39,7 +39,7 @@ func (s *Store) GraphStore() StoreGraph {
 		height := len(s.Path)
 		width := len(s.Path[0])
 
-		graph.AdjList = make([]*Vertex, height*width)
+		graph.AdjList = make([]Vertex, height*width)
 		var j int //Row
 		i := 0    //Column
 
@@ -51,19 +51,19 @@ func (s *Store) GraphStore() StoreGraph {
 
 		for j = 0; j < len(s.Path); j++ {
 			for i = 0; i < len(s.Path[j]); i++ {
-				neighborVertex := graph.AdjList[getIndex(&s.Path, i, j)]
-				if neighborVertex == nil {
-					neighborVertex = &Vertex{StoredItem: graph.getItem(memo, &index, i, j)}
-					graph.AdjList[getIndex(&s.Path, i, j)] = neighborVertex
-				}
-				graph.pushNeighbors(neighborVertex, i, j-1)
-				graph.pushNeighbors(neighborVertex, i, j+1)
-				graph.pushNeighbors(neighborVertex, i-1, j)
-				graph.pushNeighbors(neighborVertex, i+1, j)
-				if neighborVertex.StoredItem.Type == Entrance {
-					graph.StartVertex = neighborVertex
-				} else if neighborVertex.StoredItem.Type == Exit {
-					graph.EndVertex = neighborVertex
+				if graph.GraphedStore.Path[j][i].getItemType() != Wall {
+					neighborVertex := Vertex{StoredItem: graph.getItem(memo, &index, j, i)}
+					graph.pushNeighbors(&neighborVertex, j, i-1)
+					graph.pushNeighbors(&neighborVertex, j, i+1)
+					graph.pushNeighbors(&neighborVertex, j-1, i)
+					graph.pushNeighbors(&neighborVertex, j+1, i)
+					graph.AdjList[getIndex(&s.Path, j, i)] = neighborVertex
+
+					if neighborVertex.StoredItem.Type == Entrance {
+						graph.StartVertex = &neighborVertex
+					} else if neighborVertex.StoredItem.Type == Exit {
+						graph.EndVertex = &neighborVertex
+					}
 				}
 			}
 		}
@@ -77,10 +77,10 @@ func getIndex(path *PathArray, row int, column int) int {
 	return row*len((*path)[row]) + column
 }
 
-//getItem expects an reference to an index that will be able to consistently store a value.
+//getItem expects a reference to an index that will be able to consistently store a value.
 //Caches all of the incremented values to lazily build the graph and retrieve the item simultaneously.
 //Also uses memoization to quickly access already cached Items that have not yet been used
-func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, column int) Item {
+func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, column int) *Item {
 	var itemAtIndex *Item = memo[point{row: row, column: column}]
 	for itemAtIndex == nil && *index < len(graph.GraphedStore.Items) {
 		if graph.GraphedStore.Items[*index].Row == row && graph.GraphedStore.Items[*index].Column == column {
@@ -93,14 +93,14 @@ func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, colu
 	if itemAtIndex == nil {
 		itemAtIndex = &Item{Type: graph.GraphedStore.Path[row][column].getItemType(), Row: row, Column: column}
 	}
-	return *itemAtIndex
+	return itemAtIndex
 }
 
 //pushNeighbors adds all neighbors of a vertex to the graph
 func (graph *StoreGraph) pushNeighbors(neighborVertex *Vertex, row int, column int) {
 	if row >= 0 && row < len(graph.GraphedStore.Path) && column >= 0 &&
 		column < len(graph.GraphedStore.Path[row]) && graph.GraphedStore.Path[row][column].getItemType() != Wall {
-		vertex := graph.AdjList[getIndex(&graph.GraphedStore.Path, row, column)]
+		vertex := &graph.AdjList[getIndex(&graph.GraphedStore.Path, row, column)]
 		distance := abs(neighborVertex.StoredItem.Row-row) + abs(neighborVertex.StoredItem.Column-column)
 		neighborVertex.Neighbors = append(neighborVertex.Neighbors, VertexDistance{DestinationVertex: vertex, Distance: distance})
 	}
