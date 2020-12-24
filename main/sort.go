@@ -1,8 +1,10 @@
 package main
 
+import "github.com/BestCharlemagne/StoreNavigator/repository"
+
 //quickSelect places the first numItems smallest items at the beginning of the array.
 //They are not necessarily in sorted order.
-func quickSelect(zipCode int, array Stores, start int, end int, numItems int) {
+func quickSelect(zipCode int, array []repository.Store, start int, end int, numItems int) {
 	if end-start <= 0 {
 		return
 	}
@@ -36,7 +38,7 @@ func quickSelect(zipCode int, array Stores, start int, end int, numItems int) {
 }
 
 //swaps the two elements of an array
-func swap(array Stores, to int, from int) {
+func swap(array []repository.Store, to int, from int) {
 	store := array[to]
 	array[to] = array[from]
 	array[from] = store

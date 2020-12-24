@@ -10,7 +10,7 @@ import (
 //If an id is presented, then will return a Store struct.
 func GetStore(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: All Articles Endpoint")
-	stores, err := GetStores(stores, w, r)
+	stores, err := GetStores(AppRepo.GetAllStores(), w, r)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	} else if stores != nil && len(stores) > 0 {

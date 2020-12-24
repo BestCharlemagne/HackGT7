@@ -9,7 +9,7 @@ import (
 )
 
 func consume() {
-	response, err := http.Get("http://localhost:8081/articles")
+	response, err := http.Get("http://localhost:8085/articles")
 
 	if err != nil {
 		fmt.Print(err.Error())
