@@ -28,16 +28,57 @@ func TestTinyStore(t *testing.T) {
 
 	adjacencyList := []Vertex{
 		{StoredItem: &tinyExampleStore.Items[0]},
-		{StoredItem: &Item{Type: Entrance, Row: 0, Column: 1}, Neighbors: []VertexDistance{}},
-		{StoredItem: &Item{Type: Exit, Row: 1, Column: 0}, Neighbors: []VertexDistance{}},
-		{StoredItem: &Item{Type: Empty, Row: 1, Column: 1}, Neighbors: []VertexDistance{}}}
+		{StoredItem: &Item{Type: Entrance, Row: 0, Column: 1}},
+		{StoredItem: &Item{Type: Exit, Row: 1, Column: 0}},
+		{StoredItem: &Item{Type: Empty, Row: 1, Column: 1}}}
 
 	adjacencyList[0].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[1], Distance: 1}, {DestinationVertex: &adjacencyList[2], Distance: 1}}
 	adjacencyList[1].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[0], Distance: 1}, {DestinationVertex: &adjacencyList[3], Distance: 1}}
 	adjacencyList[2].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[0], Distance: 1}, {DestinationVertex: &adjacencyList[3], Distance: 1}}
 	adjacencyList[3].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[1], Distance: 1}, {DestinationVertex: &adjacencyList[2], Distance: 1}}
 
-	compareAdjacencyLists(adjacencyList, storeGraph.AdjList)
+	comp := compareAdjacencyLists(adjacencyList, storeGraph.AdjList)
+	if comp != "" {
+		t.Error(comp)
+	}
+}
+
+var smallExampleStore Store = Store{
+	ID:      1,
+	Title:   "Joe's",
+	ZipCode: 1,
+	Items:   []Item{{Product, "Banana", 0, 0, 1}, {Product, "Strawberry", 1, 0, 2}, {0, "Watermelon", 1, 2, 3}},
+	Path:    [][]pathRune{{'+', '-', '/'}, {'+', '/', '+'}, {'_', '+', '+'}},
+}
+
+func TestSmallStore(t *testing.T) {
+	storeGraph := smallExampleStore.GraphStore()
+
+	adjacencyList := []Vertex{
+		{StoredItem: &smallExampleStore.Items[0]},
+		{StoredItem: &Item{Type: Entrance, Row: 0, Column: 1}},
+		{StoredItem: nil}, //Wall
+		{StoredItem: &smallExampleStore.Items[1]},
+		{StoredItem: nil}, //Wall
+		{StoredItem: &smallExampleStore.Items[2]},
+		{StoredItem: &Item{Type: Exit, Row: 2, Column: 0}},
+		{StoredItem: &Item{Type: Empty, Row: 2, Column: 1}},
+		{StoredItem: &Item{Type: Empty, Row: 2, Column: 2}}}
+
+	adjacencyList[0].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[3], Distance: 1}, {DestinationVertex: &adjacencyList[1], Distance: 1}}
+	adjacencyList[1].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[0], Distance: 1}}
+	// adjacencyList[2].Neighbors = no neigbors
+	adjacencyList[3].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[0], Distance: 1}, {DestinationVertex: &adjacencyList[6], Distance: 1}}
+	// adjacencyList[4].Neighbors = no neighbors
+	adjacencyList[5].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[8], Distance: 1}}
+	adjacencyList[6].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[0], Distance: 1}, {DestinationVertex: &adjacencyList[7], Distance: 1}}
+	adjacencyList[7].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[6], Distance: 1}, {DestinationVertex: &adjacencyList[8], Distance: 1}}
+	adjacencyList[8].Neighbors = []VertexDistance{{DestinationVertex: &adjacencyList[7], Distance: 1}, {DestinationVertex: &adjacencyList[5], Distance: 1}}
+
+	comp := compareAdjacencyLists(adjacencyList, storeGraph.AdjList)
+	if comp != "" {
+		t.Error(comp)
+	}
 }
 
 func compareAdjacencyLists(a1 []Vertex, a2 []Vertex) string {
@@ -49,7 +90,11 @@ func compareAdjacencyLists(a1 []Vertex, a2 []Vertex) string {
 		v1 := value
 		v2 := a2[index]
 
-		sameItem := *v1.StoredItem == *v2.StoredItem
+		if (v1.StoredItem == nil) != (v2.StoredItem == nil) {
+			return fmt.Sprintf(`Neighbors at index %v have diverged. One has a nil pointer while the other doesn't.`, index)
+		}
+
+		sameItem := (v1.StoredItem == nil) && (v2.StoredItem == nil) || *v1.StoredItem == *v2.StoredItem
 
 		if !sameItem {
 			return fmt.Sprintf(`Neighbors at index %v have diverged. They have different items.`, index)

@@ -45,7 +45,7 @@ func (s *Store) GraphStore() StoreGraph {
 
 		graph.Items = make(map[int]*Item, len(s.Items))
 
-		memo := make(map[point]*Item, len(s.Items))
+		memo := make(map[int]*Item, len(s.Items))
 
 		index := 0
 
@@ -80,14 +80,15 @@ func getIndex(path *PathArray, row int, column int) int {
 //getItem expects a reference to an index that will be able to consistently store a value.
 //Caches all of the incremented values to lazily build the graph and retrieve the item simultaneously.
 //Also uses memoization to quickly access already cached Items that have not yet been used
-func (graph *StoreGraph) getItem(memo map[point]*Item, index *int, row int, column int) *Item {
-	var itemAtIndex *Item = memo[point{row: row, column: column}]
+func (graph *StoreGraph) getItem(memo map[int]*Item, index *int, row int, column int) *Item {
+	var itemAtIndex *Item = memo[getIndex(&graph.GraphedStore.Path, row, column)]
 	for itemAtIndex == nil && *index < len(graph.GraphedStore.Items) {
 		if graph.GraphedStore.Items[*index].Row == row && graph.GraphedStore.Items[*index].Column == column {
 			itemAtIndex = &graph.GraphedStore.Items[*index]
 		}
 		graph.Items[graph.GraphedStore.Items[*index].ID] = &graph.GraphedStore.Items[*index]
-		memo[point{row: row, column: column}] = &graph.GraphedStore.Items[*index]
+		cachedItem := &graph.GraphedStore.Items[*index]
+		memo[getIndex(&graph.GraphedStore.Path, cachedItem.Row, cachedItem.Column)] = cachedItem
 		*index++
 	}
 	if itemAtIndex == nil {
