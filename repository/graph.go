@@ -1,5 +1,7 @@
 package repository
 
+import "container/heap"
+
 //StoreGraph contains all data pertaining to the graph of stores
 //Both the graph and the store have an Items structure. The Items in the Store is a
 //simple list of Items, while the Items in this struct is a map that allows quick access to a specific item by ID.
@@ -9,12 +11,6 @@ type StoreGraph struct {
 	AdjList      []Vertex      `json:"adjList"`
 	StartVertex  *Vertex       `json:"start"`
 	EndVertex    *Vertex       `json:"end"`
-}
-
-//point is a simple structure to hold a row and column
-type point struct {
-	row    int
-	column int
 }
 
 //Vertex contains the data at the vertex as well as distances to all neighbor vertices
@@ -29,9 +25,7 @@ type VertexDistance struct {
 	Distance          int     `json:"distance"`
 }
 
-//GraphStore will only be successful if path is connected
-//Uses breadth-first-search to combine path and items into graph
-//TODO: Doesn't need to use breadth-first-search, can just iteratate over all entries
+//Iterates over store path to create a complete graph of it.
 func (s *Store) GraphStore() StoreGraph {
 	graph := StoreGraph{}
 	if len(s.Path) > 0 && len(s.Path[0]) > 0 {
@@ -105,6 +99,60 @@ func (graph *StoreGraph) pushNeighbors(neighborVertex *Vertex, row int, column i
 		distance := abs(neighborVertex.StoredItem.Row-row) + abs(neighborVertex.StoredItem.Column-column)
 		neighborVertex.Neighbors = append(neighborVertex.Neighbors, VertexDistance{DestinationVertex: vertex, Distance: distance})
 	}
+}
+
+func (graph *StoreGraph) findPathBetweenItems(items []*Item) []*Item {
+	path := []*Item{}
+	itemMap := make(map[*Item]bool, len(items))
+	for _, value := range items {
+		itemMap[value] = true
+	}
+	currentItem := graph.StartVertex.StoredItem
+	for currentItem != nil && len(itemMap) != 0 {
+		frontier := &PriorityQueue{}
+		heap.Init(frontier)
+		heap.Push(frontier, &PQItem{value: currentItem, priority: 0})
+		cameFrom := map[int]int{}
+		costSoFar := map[int]int{}
+
+		cameFrom[graph.itemToInt(graph.StartVertex.StoredItem)] = 0
+		costSoFar[graph.itemToInt(graph.StartVertex.StoredItem)] = 0
+
+		var foundItem *Item
+
+		for frontier.Len() != 0 && foundItem == nil {
+			curr := heap.Pop(frontier).(*PQItem).value
+
+			if itemMap[curr] {
+				foundItem = curr
+			} else {
+				for _, next := range graph.AdjList[getIndex(&graph.GraphedStore.Path, curr.Row, curr.Column)].Neighbors {
+					newCost := costSoFar[getIndex(&graph.GraphedStore.Path, curr.Row, curr.Column)] + 1
+					_, present := costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)]
+					if !present || newCost < costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)] {
+						priority := newCost + heuristic(items, next)
+						heap.Push(frontier, &PQItem{value: next.DestinationVertex.StoredItem, priority: priority})
+						cameFrom[graph.itemToInt(next.DestinationVertex.StoredItem)] = graph.itemToInt(curr)
+					}
+				}
+			}
+
+		}
+
+		delete(itemMap, foundItem)
+		path = append(path, foundItem)
+		currentItem = foundItem
+	}
+
+	return path
+}
+
+func heuristic(items []*Item, item VertexDistance) int {
+	return 1
+}
+
+func (graph *StoreGraph) itemToInt(i *Item) int {
+	return getIndex(&graph.GraphedStore.Path, i.Row, i.Column)
 }
 
 //abs value of an integer

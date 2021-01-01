@@ -15,6 +15,15 @@ type Store struct {
 	ZipCode int       `json:"zipCode"`
 	Items   ItemArray `json:"items"`
 	Path    PathArray `json:"path"`
+	Rows    []Row
+}
+
+type Row struct {
+	startRow    int
+	endRow      int
+	startColumn int
+	endColumn   int
+	items       map[Item]bool
 }
 
 //Stores is a type defintion for a slice of stores
