@@ -103,47 +103,53 @@ func (graph *StoreGraph) pushNeighbors(neighborVertex *Vertex, row int, column i
 
 func (graph *StoreGraph) findPathBetweenItems(items []*Item) []*Item {
 	path := []*Item{}
-	itemMap := make(map[*Item]bool, len(items))
+	itemSet := make(map[*Item]bool, len(items))
 	for _, value := range items {
-		itemMap[value] = true
+		itemSet[value] = true
 	}
 	currentItem := graph.StartVertex.StoredItem
-	for currentItem != nil && len(itemMap) != 0 {
+	lastLap := false
+	for currentItem != nil && (!lastLap || len(itemSet) != 0) {
 		frontier := &PriorityQueue{}
 		heap.Init(frontier)
 		heap.Push(frontier, &PQItem{value: currentItem, priority: 0})
 		cameFrom := map[int]*Item{}
 		costSoFar := map[int]int{}
 
-		cameFrom[graph.itemToInt(graph.StartVertex.StoredItem)] = nil
-		costSoFar[graph.itemToInt(graph.StartVertex.StoredItem)] = 0
+		cameFrom[graph.itemToInt(currentItem)] = nil
+		costSoFar[graph.itemToInt(currentItem)] = 0
 
 		var foundItem *Item
 
 		for frontier.Len() != 0 && foundItem == nil {
 			curr := heap.Pop(frontier).(*PQItem).value
 
-			if itemMap[curr] {
+			if itemSet[curr] {
 				foundItem = curr
 			} else {
 				for _, next := range graph.AdjList[getIndex(&graph.GraphedStore.Path, curr.Row, curr.Column)].Neighbors {
-					newCost := costSoFar[getIndex(&graph.GraphedStore.Path, curr.Row, curr.Column)] + 1
-					_, present := costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)]
-					if !present || newCost < costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)] {
+					newCost := costSoFar[getIndex(&graph.GraphedStore.Path, curr.Row, curr.Column)] + next.Distance
+					currCost, present := costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)]
+					if !present || newCost < currCost {
 						priority := newCost + heuristic(items, next)
 						heap.Push(frontier, &PQItem{value: next.DestinationVertex.StoredItem, priority: priority})
 						cameFrom[graph.itemToInt(next.DestinationVertex.StoredItem)] = curr
+						costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)] = newCost
 					}
 				}
 			}
 		}
 
-		delete(itemMap, foundItem)
-		path = append(path, foundItem)
+		delete(itemSet, foundItem)
 		currentItem = foundItem
 		path = append(path, buildPath(graph, cameFrom, foundItem)...)
+
+		if len(itemSet) == 0 && !lastLap {
+			itemSet[graph.EndVertex.StoredItem] = true
+			lastLap = true
+		}
 	}
-	return path
+	return append(path, graph.EndVertex.StoredItem)
 }
 
 func buildPath(graph *StoreGraph, cameFrom map[int]*Item, foundItem *Item) []*Item {
@@ -158,8 +164,17 @@ func buildPath(graph *StoreGraph, cameFrom map[int]*Item, foundItem *Item) []*It
 	return path
 }
 
+//Estimates how close a current node is to the goal
+//The goal could be any of the items, so takes an average distance (manhattan)
 func heuristic(items []*Item, item VertexDistance) int {
-	return 1
+	distance := 0
+	for _, goal := range items {
+		if goal == item.DestinationVertex.StoredItem {
+			return 0
+		}
+		distance += abs(goal.Row-item.DestinationVertex.StoredItem.Row) + abs(goal.Column-item.DestinationVertex.StoredItem.Column)
+	}
+	return distance / len(items)
 }
 
 func (graph *StoreGraph) itemToInt(i *Item) int {

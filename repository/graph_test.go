@@ -83,7 +83,7 @@ func TestSmallStore(t *testing.T) {
 
 func TestPathFinding(t *testing.T) {
 	storeGraph := smallExampleStore.GraphStore()
-	path := storeGraph.findPathBetweenItems([]*Item{&storeGraph.GraphedStore.Items[0], &storeGraph.GraphedStore.Items[1]})
+	path := storeGraph.findPathBetweenItems([]*Item{&storeGraph.GraphedStore.Items[0], &storeGraph.GraphedStore.Items[1], &storeGraph.GraphedStore.Items[2]})
 	print(path) //Currently just prints the found items
 }
 
