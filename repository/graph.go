@@ -112,10 +112,10 @@ func (graph *StoreGraph) findPathBetweenItems(items []*Item) []*Item {
 		frontier := &PriorityQueue{}
 		heap.Init(frontier)
 		heap.Push(frontier, &PQItem{value: currentItem, priority: 0})
-		cameFrom := map[int]int{}
+		cameFrom := map[int]*Item{}
 		costSoFar := map[int]int{}
 
-		cameFrom[graph.itemToInt(graph.StartVertex.StoredItem)] = 0
+		cameFrom[graph.itemToInt(graph.StartVertex.StoredItem)] = nil
 		costSoFar[graph.itemToInt(graph.StartVertex.StoredItem)] = 0
 
 		var foundItem *Item
@@ -132,16 +132,27 @@ func (graph *StoreGraph) findPathBetweenItems(items []*Item) []*Item {
 					if !present || newCost < costSoFar[graph.itemToInt(next.DestinationVertex.StoredItem)] {
 						priority := newCost + heuristic(items, next)
 						heap.Push(frontier, &PQItem{value: next.DestinationVertex.StoredItem, priority: priority})
-						cameFrom[graph.itemToInt(next.DestinationVertex.StoredItem)] = graph.itemToInt(curr)
+						cameFrom[graph.itemToInt(next.DestinationVertex.StoredItem)] = curr
 					}
 				}
 			}
-
 		}
 
 		delete(itemMap, foundItem)
 		path = append(path, foundItem)
 		currentItem = foundItem
+		path = append(path, buildPath(graph, cameFrom, foundItem)...)
+	}
+	return path
+}
+
+func buildPath(graph *StoreGraph, cameFrom map[int]*Item, foundItem *Item) []*Item {
+	path := []*Item{}
+	curr := cameFrom[graph.itemToInt(foundItem)]
+
+	for curr != nil {
+		path = append([]*Item{curr}, path...)
+		curr = cameFrom[graph.itemToInt(curr)]
 	}
 
 	return path
